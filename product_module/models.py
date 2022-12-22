@@ -14,6 +14,18 @@ class ProductTags(models.Model):
         return f"{self.caption}"
 
 
+class ProductBrand(models.Model):
+    title = models.CharField(max_length=300, verbose_name="نام برند", db_index=True)
+    is_active = models.BooleanField(default=False, verbose_name='فعال / غیرفعال')
+
+    class Meta:
+        verbose_name = 'برند'
+        verbose_name_plural = 'برند های محصولات'
+
+    def __str__(self):
+        return f"{self.title}"
+
+
 class ProductCategory(models.Model):
     title = models.CharField(max_length=300, db_index=True, verbose_name="عنوان")
     url_title = models.CharField(max_length=300, verbose_name="عنوان در url")
@@ -32,6 +44,7 @@ class Product(models.Model):
     title = models.CharField(max_length=300, verbose_name='نام محصول')
     category = models.ManyToManyField(ProductCategory, verbose_name="دسته بندی محصول")
     tag = models.ManyToManyField(ProductTags, verbose_name="برچسب های محصول")
+    brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, verbose_name="برند", null=True, blank=True)
     price = models.IntegerField(default=0, verbose_name='قیمت')
     short_description = models.CharField(max_length=360, null=True, db_index=True, verbose_name='توضیحات کوتاه')
     description = models.TextField(db_index=True, verbose_name="توضیحات اصلی")
@@ -52,6 +65,3 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.title}"
-
-
-

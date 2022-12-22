@@ -3,12 +3,9 @@ from .models import Product
 
 
 def product_list(request):
-    products = Product.objects.all().order_by('-price')
-    number_of_products = products.count()
-
+    products = Product.objects.all().order_by('-price')[:5]
     return render(request, 'product_module/product_list.html',
-                  {'product': products, 'total_number_of_products': number_of_products,
-                   })
+                  {'product': products})
 
 
 def product_detail(request, slug):
