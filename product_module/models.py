@@ -3,6 +3,17 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 
+class ProductTags(models.Model):
+    caption = models.CharField(max_length=300, db_index=True, verbose_name="عنوان")
+
+    class Meta:
+        verbose_name = 'برچسب'
+        verbose_name_plural = 'برچسب های محصولات'
+
+    def __str__(self):
+        return f"{self.caption}"
+
+
 class ProductCategory(models.Model):
     title = models.CharField(max_length=300, db_index=True, verbose_name="عنوان")
     url_title = models.CharField(max_length=300, verbose_name="عنوان در url")
@@ -20,6 +31,7 @@ class ProductCategory(models.Model):
 class Product(models.Model):
     title = models.CharField(max_length=300, verbose_name='نام محصول')
     category = models.ManyToManyField(ProductCategory, verbose_name="دسته بندی محصول")
+    tag = models.ManyToManyField(ProductTags, verbose_name="برچسب های محصول")
     price = models.IntegerField(default=0, verbose_name='قیمت')
     short_description = models.CharField(max_length=360, null=True, db_index=True, verbose_name='توضیحات کوتاه')
     description = models.TextField(db_index=True, verbose_name="توضیحات اصلی")
@@ -42,13 +54,4 @@ class Product(models.Model):
         return f"{self.title}"
 
 
-class ProductTags(models.Model):
-    caption = models.CharField(max_length=300, db_index=True, verbose_name="عنوان")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
-    class Meta:
-        verbose_name = 'برچسب'
-        verbose_name_plural = 'برچسب های محصولات'
-
-    def __str__(self):
-        return f"{self.caption}"
