@@ -5,10 +5,6 @@ def index_page(request):
     return render(request, 'home_module/index_page.html')
 
 
-def contact_page(request):
-    return render(request, 'home_module/contact_page.html')
-
-
 def site_header_component(request):
     return render(request, 'shared/site_header_component.html', {})
 

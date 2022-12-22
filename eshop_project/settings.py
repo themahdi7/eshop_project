@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # My Moduls
     'product_module',
     'home_module',
+    'contact_module',
     'django_render_partial',
 ]
 
