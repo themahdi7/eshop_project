@@ -1,0 +1,66 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}صفحه تماس با ما{% endblock %}
+
+{% block content %}
+    <div id="contact-page" class="container">
+        <div class="bg">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="contact-form">
+                        <h2 class="title text-center">با ما در ارتباط باشیـد</h2>
+                        <div class="status alert alert-success" style="display: none"></div>
+
+                        <form id="main-contact-form" class="contact-form row" action="{% url 'contact:profile_page' %}"
+                              method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form }}
+                            <div class="form-group col-md-12">
+                                <button type="submit" class="btn btn-primary pull-right">ارسال</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="contact-info">
+                        <h2 class="title text-center">اطلاعات تماس</h2>
+                        <address>
+                            <p>گـروه تکنوگـرافی 1614</p>
+                            <p>ایـران - آذربایجـان غربـی - خـوی</p>
+                            <p>مجتـمع تجـاری تفریحـی شمس - طبـقه 2 - پلاک 54</p>
+                            <p>تلفن تماس : 80 21 24 36 044</p>
+                            <p>فکس : 80 21 24 36 044</p>
+                            <p style="font-family: tahoma;">ایمیـل : info@1614GP.ir</p>
+                        </address>
+                        <div class="social-networks">
+                            <h2 class="title text-center">شبکـه های اجتـماعی</h2>
+                            <span class="socials-share share">
+									<ul>
+										<a href="#">
+											<li>
+												<label>بلـه</label>
+												<img src="{% static  "images/product-details/Bale.png" %}"/>
+											</li>
+										</a>
+										<a href="#">
+											<li>
+												<label>سـروش</label>
+												<img src="{% static  "images/product-details/Soroush.png" %}"/>
+											</li>
+										</a>
+										<a href="#">
+											<li>
+												<label>اینستاگرام</label>
+												<img src="{% static  "images/product-details/Instagram.png" %}"/>
+											</li>
+										</a>
+									</ul>
+								</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--/#contact-page-->
+{% endblock %}

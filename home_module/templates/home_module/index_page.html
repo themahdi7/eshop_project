@@ -1,7 +1,7 @@
 {% extends 'shared/_layout.html' %}.
 {% load static %}
 
-{% block title %}صفحه اصلی | فروشگاه کارزیبا{% endblock %}
+{% block title %}صفحه اصلی |{{ site_setting.site_name }}{% endblock %}
 {% block content %}
 
     <section id="slider"><!--slider-->
@@ -9,42 +9,27 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div id="slider-carousel" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            <li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
-                            <li data-target="#slider-carousel" data-slide-to="1"></li>
-                        </ol>
+                        {#                        <ol class="carousel-indicators">#}
+                        {#                            <li data-target="#slider-carousel" data-slide-to="0" class=""></li>#}
+                        {#                            <li data-target="#slider-carousel" data-slide-to="1" class=""></li>#}
+                        {#                        </ol>#}
 
                         <div class="carousel-inner">
+                            {% for item in slider %}
+                                <div class="item {% if forloop.first %}active {% endif %}">
+                                    <div class="col-sm-6">
+                                        <h2>{{ item.title }}</h2>
+                                        <p>{{ item.description }}</p>
+                                        <a href="{{ item.url }}" class="btn btn-default get"
+                                           target="_blank">{{ item.url_title }}</a>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <img src="{{ item.image.url }}" class="girl img-responsive"
+                                             alt="photo of {{ item.title }}">
+                                    </div>
+                                </div>
 
-                            <div class="item active">
-                                <div class="col-sm-6">
-                                    <h1><span>SHOP</span>CENTER</h1>
-                                    <h2>Shop Center</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. </p>
-                                    <button type="button" class="btn btn-default get">Get it now</button>
-                                </div>
-                                <div class="col-sm-6">
-                                    <img src="{% static  "images/home/girl2.jpg" %}" class="girl img-responsive"
-                                         alt=""/>
-                                    <img src="{% static  "images/home/pricing.png" %}" class="pricing" alt=""/>
-                                </div>
-                            </div>
-
-                            <div class="item">
-                                <div class="col-sm-6">
-                                    <h1><span>SHOP</span>CENTER</h1>
-                                    <h2>Shop Center</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. </p>
-                                    <button type="button" class="btn btn-default get">Get it now</button>
-                                </div>
-                                <div class="col-sm-6">
-                                    <img src="{% static  "images/home/girl2.jpg" %}" class="girl img-responsive"
-                                         alt=""/>
-                                    <img src="{% static  "images/home/pricing.png" %}" class="pricing" alt=""/>
-                                </div>
-                            </div>
+                            {% endfor %}
 
                         </div>
 
@@ -59,7 +44,7 @@
                 </div>
             </div>
         </div>
-    </section><!--/slider-->
+    </section>
 
     <section>
         <div class="container">

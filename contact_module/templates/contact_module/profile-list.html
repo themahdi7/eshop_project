@@ -1,0 +1,23 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}
+    لیست پروفایل ها
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="row">
+    <div class="com-md-12">
+        <ul>
+            {% for profile in profiles %}
+                <li>
+                    <img src="{{ profile.image.url }}" alt="{{ profile.image.name }}" width="200" height="100">
+                </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+</div>
+</div>
+{% endblock %}

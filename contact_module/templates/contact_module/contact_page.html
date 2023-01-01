@@ -11,25 +11,30 @@
                     <div class="contact-form">
                         <h2 class="title text-center">با ما در ارتباط باشیـد</h2>
                         <div class="status alert alert-success" style="display: none"></div>
-                        <form id="main-contact-form" class="contact-form row" name="contact-form" method="post">
+
+                        <form id="main-contact-form" class="contact-form row" action="{% url 'contact:contact_page' %}"
+                              method="post">
+                            {% csrf_token %}
+                            {#                                                        {{ form }}#}
                             <div class="form-group col-md-6">
-                                <input type="text" name="name" class="form-control" required="required"
-                                       placeholder="نام">
+                                {{ form.full_name }}
+                                {{ form.full_name.errors }}
                             </div>
                             <div class="form-group col-md-6">
-                                <input type="email" name="email" class="form-control" required="required"
-                                       placeholder="ایمیـل">
+                                {{ form.email }}
+                                {{ form.email.errors }}
+                            </div>
+                            <div class="form-group col-md-12 ">
+                                {{ form.title }}
+                                {{ form.title.errors }}
                             </div>
                             <div class="form-group col-md-12">
-                                <input type="text" name="subject" class="form-control" required="required"
-                                       placeholder="موضـوع">
+                                {{ form.message }}
+                                {{ form.message.errors }}
                             </div>
+
                             <div class="form-group col-md-12">
-                                <textarea name="message" id="message" required class="form-control" rows="8"
-                                          placeholder="پیغـام شمـا"></textarea>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <input type="submit" name="submit" class="btn btn-primary pull-right" value="ارسـال">
+                                <button type="submit" class="btn btn-primary pull-right">ارسال</button>
                             </div>
                         </form>
                     </div>
@@ -38,12 +43,17 @@
                     <div class="contact-info">
                         <h2 class="title text-center">اطلاعات تماس</h2>
                         <address>
-                            <p>گـروه تکنوگـرافی 1614</p>
-                            <p>ایـران - آذربایجـان غربـی - خـوی</p>
-                            <p>مجتـمع تجـاری تفریحـی شمس - طبـقه 2 - پلاک 54</p>
-                            <p>تلفن تماس : 80 21 24 36 044</p>
-                            <p>فکس : 80 21 24 36 044</p>
-                            <p style="font-family: tahoma;">ایمیـل : info@1614GP.ir</p>
+                            <p>{{ site_setting.site_name }}</p>
+                            {% if site_setting.address %}
+                                <p>آدرس : {{ site_setting.address }}</p>
+                            {% endif %}
+                            {% if site_setting.phone %}
+                                <p>تلفن تماس : {{ site_setting.phone }}</p>
+                            {% endif %}
+                            {% if site_setting.fax %}
+                                <p>فکس : {{ site_setting.fax }}</p>
+                            {% endif %}
+                            <p style="font-family: tahoma;">ایمیـل : {{ site_setting.email }}</p>
                         </address>
                         <div class="social-networks">
                             <h2 class="title text-center">شبکـه های اجتـماعی</h2>

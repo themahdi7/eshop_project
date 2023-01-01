@@ -9,12 +9,24 @@
     <section>
         <div class="container">
             <div class="row">
-
+                {% if is_favorite %}
+                    <div class="col-md-12">
+                    <div class="row">
+                        <p>
+                            محصول مورد علاقه
+                        </p>
+                    </div>
+                {% endif %}
+                </div>
                 <div class="col-sm-9 padding-right">
                     <div class="product-details"><!--product-details-->
                         <div class="col-sm-5">
                             <div class="view-product">
-                                <img src="{% static "images/product-details/1.jpg" %}" alt="">
+                                {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="image of {{ product.title }}">
+                                {% else %}
+                                    <img src="{% static "images/product-details/1.jpg" %}" alt="image of {{ product.title }}">
+                                {% endif %}
                                 <h3>بزرگنمایـی</h3>
                             </div>
                             <div id="similar-product" class="carousel slide" data-ride="carousel">
@@ -61,12 +73,23 @@
 										<span>قیمت : {{ product.price }} تومان</span>
 									</span>
                                     <span>
-										<label>تعداد :</label>
-										<input type="text" value="3" class="search_box">
-										<button type="button" class="btn btn-fefault cart">
+                                        <form action="{% url 'product:favorite-product' %}" method="post">
+                                            {% csrf_token %}
+                                            <label>تعداد :</label>
+										<input type="hidden" name="product_id" value="{{ product.id }}"
+                                               class="search_box">
+										<button type="submit" class="btn btn-fefault cart">
 											<i class="fa fa-shopping-cart"></i>
-											افـزودن به سبـد خریـد
+											ثبت به عنوان کالای محبوب
 										</button>
+                                        </form>
+
+{#										<label>تعداد :</label>#}
+{#										<input type="text" value="3" class="search_box">#}
+{#										<button type="button" class="btn btn-fefault cart">#}
+{#											<i class="fa fa-shopping-cart"></i>#}
+{#											افـزودن به سبـد خریـد#}
+{#										</button>#}
 									</span>
                                 </div>
                                 <div>

@@ -45,12 +45,15 @@ class Product(models.Model):
     category = models.ManyToManyField(ProductCategory, verbose_name="دسته بندی محصول")
     tag = models.ManyToManyField(ProductTags, verbose_name="برچسب های محصول")
     brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, verbose_name="برند", null=True, blank=True)
+    image = models.ImageField(upload_to='images/products', null=True, blank=True, verbose_name='تصویر محصول')
     price = models.IntegerField(default=0, verbose_name='قیمت')
     short_description = models.CharField(max_length=360, null=True, db_index=True, verbose_name='توضیحات کوتاه')
     description = models.TextField(db_index=True, verbose_name="توضیحات اصلی")
     is_active = models.BooleanField(default=False, verbose_name='فعال / غیرفعال')
     is_delete = models.BooleanField(default=False, verbose_name='حذف شده / حذف نشده')
     slug = models.SlugField(default="", null=False, blank=True, max_length=200, unique=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         verbose_name = 'محصول'

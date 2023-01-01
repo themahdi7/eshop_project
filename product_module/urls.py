@@ -3,6 +3,9 @@ from . import views
 
 app_name = "product"
 urlpatterns = [
-    path('', views.product_list, name="product_list"),
-    path('<slug:slug>', views.product_detail, name="product_detail"),
+    path('', views.ProductListView.as_view(), name="product_list"),
+    path('product-favorite', views.AddProductFavorite.as_view(), name="favorite-product"),
+    path('<slug:slug>', views.ProductDetailView.as_view(), name="product_detail"),
+
+
 ]
