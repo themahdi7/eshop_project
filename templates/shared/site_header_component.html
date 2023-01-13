@@ -39,9 +39,9 @@
 
                 <div class="col-sm-4" style="text-align: left;">
                     <div class="logo">
-                        <a href="index.html"><img src="{{ site_setting.site_logo.url }}"
-                                                  alt="Logo {{ site_setting.site_name }}"
-                                                  style="text-align: center;" height="50" width="65"/></a>
+                        <a href="{% url 'home:home' %}"><img src="{{ site_setting.site_logo.url }}"
+                                                             alt="Logo {{ site_setting.site_name }}"
+                                                             style="text-align: center;" height="50" width="65"/></a>
                         {#                        <a href="index.html"><img src="{% static  "images/home/logo.png" %}" alt="Logo"#}
                         {#                                                  style="text-align: center;" /></a>#}
                     </div>
@@ -54,8 +54,9 @@
                                 {% if request.user.is_superuser %}
                                     <li><a href="/admin"><i class="fa fa-user"></i> پنل ادمین</a></li>
                                 {% endif %}
-                                <li><a href="login.html"><i class="fa fa-shopping-cart"></i> سبد خرید</a></li>
-                                <li><a href="login.html"><i class="fa fa-user"></i> پنل کاربری</a></li>
+                                <li><a href="{% url 'panel:user_order_page' %}"><i class="fa fa-shopping-cart"></i> سبد خرید</a></li>
+                                <li><a href="{% url 'panel:user_dashboard' %}"><i class="fa fa-user"></i> پنل کاربری</a>
+                                </li>
                                 <li><a href="{% url 'account:logout_page' %}"><i class="fa fa-sign-out"></i> خروج</a>
                                 </li>
                             {% else %}
@@ -93,24 +94,27 @@
                     </div>
                     <div class="mainmenu pull-right">
                         <ul class="nav navbar-nav collapse navbar-collapse">
-                            <li><a href="{% url 'home:home' %}" class="active">خـانه</a></li>
-                            <li class="dropdown"><a href="#">فروشگـاه<i class="fa fa-angle-down"></i></a>
-                                <ul role="menu" class="sub-menu">
-                                    <li><a href="{% url 'product:product_list' %}">محصولات</a></li>
-                                    <li><a href="product-details.html">جزئیات محصولات</a></li>
-                                    <li><a href="checkout.html">پرداخت</a></li>
-                                    <li><a href="cart.html">سبـد خریـد</a></li>
-                                    <li><a href="{% url 'account:login_page' %}">ورود</a></li>
-                                </ul>
+                            <li><a href="{% url 'home:home' %}" {% if request.resolver_match.url_name == 'home' %}
+                                   class="active" {% endif %}>خـانه</a></li>
+                            <li class="dropdown"><a href="{% url 'product:product_list' %}"
+                                    {% if request.resolver_match.url_name == 'product_list' %}
+                                                    class="active" {% endif %}>فروشگـاه</a>
+
                             </li>
-                            <li class="dropdown"><a href="#">اخبـار<i class="fa fa-angle-down"></i></a>
-                                <ul role="menu" class="sub-menu">
-                                    <li><a href="blog.html">آخریـن اخبـار</a></li>
-                                    <li><a href="blog-single.html">صفحـه خبـر</a></li>
-                                </ul>
+                            <li class="dropdown"><a href="{% url 'article:articles_list' %}"
+                                    {% if request.resolver_match.url_name == 'articles_list' %}
+                                                    class="active" {% endif %}>مقالات</a>
+{#                                <ul role="menu" class="sub-menu">#}
+{#                                    <li><a href="blog.html">آخریـن اخبـار</a></li>#}
+{#                                    <li><a href="blog-single.html">صفحـه خبـر</a></li>#}
+{#                                </ul>#}
                             </li>
-                            <li><a href="{% url 'home:about_us_page' %}">درباره مـا</a></li>
-                            <li><a href="{% url 'contact:contact_page' %}">تماس با مـا</a></li>
+                            <li><a href="{% url 'home:about_us_page' %}"
+                                    {% if request.resolver_match.url_name == 'about_us_page' %}
+                                   class="active" {% endif %}>درباره مـا</a></li>
+                            <li><a href="{% url 'contact:contact_page' %}"
+                                    {% if request.resolver_match.url_name == 'contact_page' %}
+                                   class="active" {% endif %}>تماس با مـا</a></li>
                         </ul>
                     </div>
                 </div>

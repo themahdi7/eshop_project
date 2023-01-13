@@ -44,8 +44,15 @@ INSTALLED_APPS = [
     'contact_module',
     'account_module',
     'site_module',
+    'article_module',
+    'user_panel_module',
+    'polls',
+    'order_module',
     # external apps
     'django_render_partial',
+    'ckeditor',
+    'sorl.thumbnail',
+    'jalali_date',
 ]
 
 MIDDLEWARE = [
@@ -80,6 +87,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'eshop_project.wsgi.application'
 
 AUTH_USER_MODEL = 'account_module.User'
+LOGIN_URL = '/login'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -114,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'fa-ir'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Iran'
 
 USE_I18N = True
 
@@ -134,13 +142,6 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'keramatimahdi1@gmail.com'
-# EMAIL_HOST_PASSWORD = 'riwlfwcpyvbgjjyv'
-# EMAIL_PORT = 587
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -148,6 +149,31 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
 
+# JALALI_DATE default settings
+
+JALALI_DATE_DEFAULTS = {
+    'Strftime': {
+        'date': '%y/%m/%d',
+        'datetime': '%H:%M:%S _ %y/%m/%d',
+    },
+    'Static': {
+        'js': [
+            # loading datepicker
+            'admin/js/django_jalali.min.js',
+            # OR
+            # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.core.js',
+            # 'admin/jquery.ui.datepicker.jalali/scripts/calendar.js',
+            # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc.js',
+            # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc-fa.js',
+            # 'admin/js/main.js',
+        ],
+        'css': {
+            'all': [
+                'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css',
+            ]
+        }
+    },
+}
 # jazzmin settings
 
 # JAZZMIN_UI_TWEAKS = {

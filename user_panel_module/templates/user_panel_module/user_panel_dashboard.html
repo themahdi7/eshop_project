@@ -1,0 +1,66 @@
+{% extends 'shared/_layout.html' %}
+{% load render_partial %}
+{% load thumbnail %}
+{% load static %}
+
+{% block title %}داشبورد{% endblock %}
+
+{% block content %}
+    <h2 class="title text-center">
+        {% if request.resolver_match.url_name == 'user_dashboard' %}
+            پنل کاربری
+        {% elif request.resolver_match.url_name == 'edit_profile' %}
+            ویرایش اطلاعات کاربری
+        {% endif %}
+        {#        {% if request.resolver_match.url_name == 'edit_profile'%}{% endif %}#}
+    </h2>
+
+    <h2 class="title text-center">
+        {% if request.resolver_match.url_name == 'edit_profile' %}
+            ویرایش اطلاعات کاربری
+        {% endif %}
+    </h2>
+    <div class="row">
+        <div class="col-md-3 pull-right">
+            {% render_partial 'user_panel_module.views.user_panel_menu_component' %}
+        </div>
+        <div class="container">
+            <div class="col-md-10">
+                <ul class="list-group">
+                    <div class="thumbnail">
+                        {% if user.avatar %}
+                            {% thumbnail user.avatar "180x180" crop='center' as im %}
+                                <img src="{{ im.url }}" alt="avatar {{ user.last_name }}" class="img-circle">
+                            {% endthumbnail %}
+                        {% else %}
+                            <img src="{% static 'images/default-avatar.png' %}" alt="{{ user.last_name }}"
+                                 class="img-circle" width="180"
+                                 height="180">
+                        {% endif %}
+
+                        <div class="caption">
+                            <h3 class="text-center">{{ user.username }}</h3>
+                            {% if user.first_name or user.last_name %}
+                                <hr>
+                                <h5 class="text-center">{{ user.first_name }} {{ user.last_name }}</h5>
+                            {% endif %}
+                            {% if user.about_user %}
+                                <hr>
+                                <p>{{ user.about_user }}</p>
+                            {% endif %}
+                            {% if user.address %}
+                                <hr>
+                                <p>{{ user.address }}</p>
+                            {% endif %}
+                        </div>
+                        <hr>
+                        <a href="{% url 'panel:edit_profile' %}">
+                            <button type="button" class="btn btn-primary btn-lg btn-block">ویرایش اطلاعات</button>
+                        </a>
+                    </div>
+                </ul>
+            </div>
+
+        </div>
+
+{% endblock %}

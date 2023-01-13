@@ -1,3 +1,5 @@
+from turtle import position
+
 from django.db import models
 
 
@@ -64,3 +66,25 @@ class FooterLink(models.Model):
 
     def __str__(self):
         return f'{self.title} - {self.footer_link_box.title}'
+
+
+class SiteBanner(models.Model):
+    class SiteBannerPosition(models.TextChoices):
+        product_list = 'product_list', 'صفحه لیست محصولات',
+        product_detail = 'product_detail', 'صفحه جزییات محصولات',
+
+
+    title = models.CharField(max_length=200, verbose_name='عنوان بنر')
+    url = models.URLField(null=True, blank=True, verbose_name='لینک')
+    image = models.ImageField(upload_to='images/banner', verbose_name='تصویر بنر')
+    is_active = models.BooleanField(default=True, verbose_name='فعال / غیرفعال')
+    position = models.CharField(max_length=200, choices=SiteBannerPosition.choices, verbose_name='جایگاه نمایشی')
+
+    class Meta:
+        verbose_name = 'بنر تبلیغاتی'
+        verbose_name_plural = 'بنر های تبلیغاتی'
+
+    def __str__(self):
+        return self.title
+
+

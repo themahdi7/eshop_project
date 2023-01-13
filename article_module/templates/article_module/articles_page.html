@@ -1,0 +1,79 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load jalali_tags %}
+{% load render_partial %}
+
+{% block title %}لیست مقالات{% endblock %}
+
+{% block content %}
+
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-9">
+                    <div class="blog-post-area">
+                        <h2 class="title text-center">مقالات برای شما</h2>
+                        {% for article in articles %}
+                            <div class="single-blog-post">
+                                <h3>{{ article.title }}</h3>
+                                <div class="post-meta">
+                                    <ul>
+                                        {% if article.author is not None %}
+                                            <li><i class="fa fa-user"></i>{{ article.author }}</li>
+                                        {% endif %}
+                                        <li><i class="fa fa-clock-o"></i>{{ article.created.time }}</li>
+                                        <li><i class="fa fa-calendar"></i>{{ article.created.date | to_jalali }}</li>
+                                    </ul>
+                                    <span>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star-half-o"></i>
+								</span>
+                                </div>
+                                <a href="{% url 'article:article_detail' pk=article.id slug=article.slug %}">
+                                    {#                                    <img src="{{ article.image.url }}" alt="image {{ article.title }}">#}
+                                    {% thumbnail article.image "862x398" crop='center' as im %}
+                                        <img src="{{ im.url }}" alt="image {{ article.title }}">
+                                    {% endthumbnail %}
+                                </a>
+                                <p>{{ article.short_description }}</p>
+                                <a class="btn btn-primary" href="{% url 'article:article_detail' pk=article.id slug=article.slug %}">ادامـه مطلب</a>
+                            </div>
+
+                        {% endfor %}
+
+                        <br>
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                                <li><a href="?page={{ page_obj.previous_page_number }}">قبلی</a></li>
+                            {% endif %}
+                        {% for pageNumber in paginator.page_range %}
+                            <li class="{% if page_obj.number == pageNumber %}active{% endif %}"><a href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li><a href="?page={{ page_obj.next_page_number }}">بعدی</a></li>
+                        {% endif %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+                            {% render_partial 'article_module.views.article_categories_component' %}
+                        </div><!--/category-productsr-->
+                        <div class="shipping text-center"><!--shipping-->
+                            <img src="{% static "images/home/shipping.jpg" %}" alt="">
+                        </div><!--/shipping-->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

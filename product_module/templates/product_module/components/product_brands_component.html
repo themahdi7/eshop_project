@@ -1,0 +1,12 @@
+<h2>برنـد ها</h2>
+<div class="brands-name">
+    <ul class="nav nav-pills nav-stacked">
+        {% for brand in brands %}
+            {% if brand.products_count %}
+                <li><a href="{% url 'product:product_brands_list' brand=brand.url_title %}"> <span
+                        class="pull-left">({{ brand.products_count }})</span>{{ brand.title }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+    </ul>
+</div>

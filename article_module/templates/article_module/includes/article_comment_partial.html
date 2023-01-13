@@ -1,0 +1,58 @@
+{% load static %}
+{% load render_partial %}
+{% load jalali_tags %}
+{% load thumbnail %}
+
+<h2> نظرات ({{ comment_count }})</h2>
+<ul class="media-list">
+    {% for comment in comment %}
+        <li class="media" id="single_comment_box_{{ comment.id }}">
+            <a class="pull-right">
+                {% if comment.user.avatar %}
+                    {% thumbnail comment.user.avatar "121x86" crop='center' as im %}
+                        <img src="{{ im.url }}" alt="avatar {{ comment.user }}">
+                    {% endthumbnail %}
+                {% else %}
+                    <img class="media-object" src="{% static "images/default-avatar1.png" %}"
+                         alt="avatar {{ comment.user }}">
+                {% endif %}
+            </a>
+            <div class="media-body">
+                <ul class="sinlge-post-meta">
+                    <li><i class="fa fa-user"></i>{{ comment.user }}</li>
+                    <li><i class="fa fa-clock-o"></i>{{ comment.created.time }}</li>
+                    <li><i class="fa fa-calendar"></i>{{ comment.created.date | to_jalali }}
+                    </li>
+                </ul>
+                <p>{{ comment.text }}</p>
+                <a class="btn btn-primary" onclick="fillParentId({{ comment.id }})"><i class="fa fa-reply"></i>پاسـخ</a>
+            </div>
+        </li>
+        {% for sub_comment in comment.articlecomment_set.all %}
+            <li class="media second-media" id="single_comment_box_{{ comment.id }}">
+                <a class="pull-right">
+                    {% if sub_comment.user.avatar %}
+                        {% thumbnail sub_comment.user.avatar "121x86" crop='center' as im %}
+                            <img src="{{ im.url }}" alt="avatar {{ sub_comment.user }}">
+                        {% endthumbnail %}
+                    {% else %}
+                        <img class="media-object"
+                             src="{% static "images/default-avatar1.png" %}"
+                             alt="avatar {{ sub_comment.user }}">
+                    {% endif %}
+                </a>
+                <div class="media-body">
+                    <ul class="sinlge-post-meta">
+                        <li><i class="fa fa-user"></i>{{ sub_comment.user }}</li>
+                        <li><i class="fa fa-clock-o"></i>{{ comment.created.time }}</li>
+                        <li><i class="fa fa-calendar"></i>{{ comment.created.date | to_jalali }}
+                        </li>
+                    </ul>
+                    <p>{{ sub_comment.text }}</p>
+                </div>
+            </li>
+        {% endfor %}
+
+    {% endfor %}
+
+</ul>

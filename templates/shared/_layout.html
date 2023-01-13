@@ -9,6 +9,9 @@
     <meta name="author" content="">
     <title>{% block title %}{% endblock %}</title>
     {% include 'shared/header_referances.html' %}
+{% block header_refrances %}
+
+{% endblock %}
 </head><!--/head-->
 <body>
 {% render_partial 'home_module.views.site_header_component' %}
@@ -19,5 +22,8 @@
 {% render_partial 'home_module.views.site_footer_component' %}
 
 {% include 'shared/footer_referances.html' %}
+{% block footer_refrances %}
+
+{% endblock %}
 </body>
 </html>

@@ -1,22 +1,27 @@
+{% load poll_extras %}
 {% load static %}
+{% load thumbnail %}
 
-<div class="col-sm-4">
+<div class="col-sm-{{ col_size }}">
     <div class="product-image-wrapper">
         <div class="single-products">
             <div class="productinfo text-center">
                 {% if product.image %}
-                     <img src="{{ product.image.url }}" width="268px" height="250px" alt="image of {{ product.title }}">
+                    {% thumbnail product.image "268x250" crop='center' as im %}
+                        <img src="{{ im.url }}" alt="image {{ product.title }}">
+                    {% endthumbnail %}
+{#                    <img src="{{ product.image.url }}" width="268px" height="250px" alt="image of {{ product.title }}">#}
                 {% else %}
                     <img src="{% static "images/shop/product.jpg" %}" alt="image of {{ product.title }}">
 
                 {% endif %}
-                <h2>{{ product.price }} تومان</h2>
+                <h2>{{ product.price | three_digit_currency }}</h2>
                 <p>{{ product.title }}</p>
                 <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
             </div>
             <div class="product-overlay">
                 <div class="overlay-content">
-                    <h2>{{ product.price }} تومان</h2>
+                    <h2>{{ product.price | three_digit_currency }}  </h2>
                     <p>{{ product.short_description }}</p>
                     <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد
                         خریـد</a>
@@ -25,7 +30,7 @@
         </div>
         <div class="choose">
             <ul class="nav nav-pills nav-justified">
-                <li><a href="{{ product.get_absolute_url }}"><i class="fa fa-plus-square"></i>مشاهده جزییات</a></li>
+                <li><a href="{% url 'product:product_detail' pk=product.id slug=product.slug %}"><i class="fa fa-plus-square"></i>مشاهده جزییات</a></li>
                 <li><a href=""><i class="fa fa-plus-square"></i>مقایسه</a></li>
             </ul>
         </div>
