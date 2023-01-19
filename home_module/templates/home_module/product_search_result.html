@@ -1,0 +1,71 @@
+{% extends 'shared/_layout.html' %}
+{% load render_partial %}
+{% load thumbnail %}
+{% block title %}
+    جستجو برای
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-9 padding-right">
+                    {% if result %}
+                        <div class="features_items"><!--features_items-->
+                            <h2 class="title text-center">نتیجه جستجو</h2>
+                            {% for product in result %}
+                                {% include 'product_module/includes/product_item_partial.html'  with product=product col_size=4 %}
+                            {% endfor %}
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                    <li><a class="cursor-pointer"
+                                           onclick="fillpage({{ page_obj.previous_page_number }})">قبلی</a></li>
+                                {% endif %}
+                                {% for pageNumber in paginator.page_range %}
+                                    <li class="{% if page_obj.number == pageNumber %}active{% endif %}">
+                                        <a class="cursor-pointer"
+                                           onclick="fillpage({{ pageNumber }})">{{ pageNumber }}</a></li>
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    <li><a class="cursor-pointer" onclick="fillpage({{ page_obj.next_page_number }})">بعدی</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div><!--features_items-->
+                    {% else %}
+                        <div class="alert alert-danger">
+                            <p>محصولی یافت نشد</p>
+                            <hr>
+                            <a href="{% url 'home:home' %}">بازگشت به خانه</a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+                        {% render_partial 'product_module.views.product_categories_component' %}
+                    </div><!--/category-productsr-->
+
+                    <div class="brands_products"><!--brands_products-->
+                        {% render_partial 'product_module.views.product_brands_component' %}
+                    </div><!--/brands_products-->
+                        {% for banner in banners %}
+                            <div class="shipping text-center"><!--shipping-->
+                                {% if banner.image %}
+                                    {% thumbnail banner.image "270x329" quality=100 crop='center' as im %}
+                                        <a href="{{ banner.url }}">
+                                            <img src="{{ im.url }}" alt="image {{ banner.title }}">
+                                        </a>
+                                    {% endthumbnail %}{% endif %}
+                            </div><!--/shipping-->
+                        {% endfor %}
+                    <br>
+                    <br>
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </section>
+{% endblock %}

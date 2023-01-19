@@ -51,12 +51,6 @@
                             <hr>
                             <br>
                             <p>{{ article.text | safe }}</p>
-                            <div class="pager-area">
-                                <ul class="pager pull-left">
-                                    <li><a href="#">قبلی</a></li>
-                                    <li><a href="#">بعـدی</a></li>
-                                </ul>
-                            </div>
                         </div>
                     </div><!--/blog-post-area-->
 
@@ -83,9 +77,7 @@
                         </ul>
                     </div><!--/rating-area-->
 
-                    <div class="socials-share">
-                        <a href=""><img src="{% static "images/blog/socials.png" %}" alt=""></a>
-                    </div><!--/socials-share-->
+                    <hr>
 
                     <div class="media commnets">
                         <a class="pull-right" href="#">
@@ -121,12 +113,14 @@
                                 <li class="media" id="single_comment_box_{{ comment.id }}">
                                     <a class="pull-right">
                                         {% if comment.user.avatar %}
-                                            {% thumbnail comment.user.avatar "121x86" crop='center' as im %}
-                                                <img src="{{ im.url }}" alt="avatar {{ comment.user }}">
+                                            {% thumbnail comment.user.avatar "90x90" crop='center' as im %}
+                                                <img src="{{ im.url }}" alt="avatar {{ comment.user }}"
+                                                     class="img-circle">
                                             {% endthumbnail %}
                                         {% else %}
-                                            <img class="media-object" src="{% static "images/default-avatar1.png" %}"
-                                                 alt="avatar {{ comment.user }}">
+                                            <img class="media-object img-circle"
+                                                 src="{% static "images/default-avatar1.png" %}"
+                                                 alt="avatar {{ comment.user }}" height="90" width="90">
                                         {% endif %}
                                     </a>
                                     <div class="media-body">
@@ -137,27 +131,30 @@
                                             </li>
                                         </ul>
                                         <p>{{ comment.text }}</p>
-                                        <a class="btn btn-primary" onclick="fillParentId({{ comment.id }})"><i class="fa fa-reply"></i>پاسـخ</a>
+                                        <a class="btn btn-primary" onclick="fillParentId({{ comment.id }})"><i
+                                                class="fa fa-reply"></i>پاسـخ</a>
                                     </div>
                                 </li>
                                 {% for sub_comment in comment.articlecomment_set.all %}
                                     <li class="media second-media" id="single_comment_box_{{ comment.id }}">
                                         <a class="pull-right">
                                             {% if sub_comment.user.avatar %}
-                                                {% thumbnail sub_comment.user.avatar "121x86" crop='center' as im %}
-                                                    <img src="{{ im.url }}" alt="avatar {{ sub_comment.user }}">
+                                                {% thumbnail sub_comment.user.avatar "90x90" crop='center' as im %}
+                                                    <img src="{{ im.url }}" alt="avatar {{ sub_comment.user }}"
+                                                         class="img-circle">
                                                 {% endthumbnail %}
                                             {% else %}
-                                                <img class="media-object"
+                                                <img class="media-object img-circle"
                                                      src="{% static "images/default-avatar1.png" %}"
-                                                     alt="avatar {{ sub_comment.user }}">
+                                                     alt="avatar {{ sub_comment.user }}" height="90" width="90">
                                             {% endif %}
                                         </a>
                                         <div class="media-body">
                                             <ul class="sinlge-post-meta">
                                                 <li><i class="fa fa-user"></i>{{ sub_comment.user }}</li>
-                                                <li><i class="fa fa-clock-o"></i>{{ article.created.time }}</li>
-                                                <li><i class="fa fa-calendar"></i>{{ article.created.date | to_jalali }}
+                                                <li><i class="fa fa-clock-o"></i>{{ sub_comment.created.time }}</li>
+                                                <li>
+                                                    <i class="fa fa-calendar"></i>{{ sub_comment.created.date | to_jalali }}
                                                 </li>
                                             </ul>
                                             <p>{{ sub_comment.text }}</p>
@@ -181,8 +178,10 @@
                                             <label>متن پیام</label>
                                         </div>
                                         <span>*</span>
-                                        <textarea name="message" rows="11" class="form-control" id="comment-text" placeholder="نظر خود را به اشتراک بگذارید"></textarea>
-                                        <a class="btn btn-primary" onclick="sendArticleComment({{ article.id }})">ارسـال نظـر</a>
+                                        <textarea name="message" rows="11" class="form-control" id="comment-text"
+                                                  placeholder="نظر خود را به اشتراک بگذارید"></textarea>
+                                        <a class="btn btn-primary" onclick="sendArticleComment({{ article.id }})">ارسـال
+                                            نظـر</a>
                                     </div>
                                 </div>
 
@@ -192,18 +191,12 @@
                                 برای درج نظر میبایست در سایت <a href="{% url 'account:login_page' %}">لاگین</a> کنید
                             </div>
                         {% endif %}
-
-
                     </div><!--/Repaly Box-->
                 </div>
 
                 <div class="col-sm-3">
                     <div class="left-sidebar">
                         {% render_partial 'article_module.views.article_categories_component' %}
-                        <div class="shipping text-center"><!--shipping-->
-                            <img src="{% static "images/home/shipping.jpg" %}" alt="">
-                        </div><!--/shipping-->
-
                     </div>
                 </div>
 

@@ -17,21 +17,20 @@
                 {% endif %}
                 <h2>{{ product.price | three_digit_currency }}</h2>
                 <p>{{ product.title }}</p>
-                <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
+                <a onclick="addProductToOrder('{{ product.id }}')"  class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
             </div>
             <div class="product-overlay">
                 <div class="overlay-content">
                     <h2>{{ product.price | three_digit_currency }}  </h2>
                     <p>{{ product.short_description }}</p>
-                    <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد
+                    <a onclick="addProductToOrder('{{ product.id }}')" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد
                         خریـد</a>
                 </div>
             </div>
         </div>
         <div class="choose">
             <ul class="nav nav-pills nav-justified">
-                <li><a href="{% url 'product:product_detail' pk=product.id slug=product.slug %}"><i class="fa fa-plus-square"></i>مشاهده جزییات</a></li>
-                <li><a href=""><i class="fa fa-plus-square"></i>مقایسه</a></li>
+                <li><a href="{% url 'product:product_detail' pk=product.id slug=product.slug %}"><i class="fa fa-info-circle"></i>مشاهده جزییات</a></li>
             </ul>
         </div>
     </div>

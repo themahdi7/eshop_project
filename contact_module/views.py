@@ -1,20 +1,15 @@
-from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
 from site_module.models import SiteSetting
 from .forms import ContactUsModelForm
 from .models import UserProfile
-from utils.email_service import send_email
 
 
 class ContactUsView(CreateView):
     template_name = 'contact_module/contact_page.html'
     form_class = ContactUsModelForm
     success_url = reverse_lazy('contact:contact_page')
-
-        # send_email('پیام شما را دریافت کردیم', user_email, {'user': user_email},
-        #            'emails/contact_response.html')
 
 
     def get_context_data(self, *args, **kwargs):

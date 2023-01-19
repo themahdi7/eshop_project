@@ -71,6 +71,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates']
+            # 'DIRS': [os.path.join(BASE_DIR, 'templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -122,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'fa-ir'
 
-TIME_ZONE = 'Iran'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
@@ -149,6 +150,9 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
 
+
+
+
 # JALALI_DATE default settings
 
 JALALI_DATE_DEFAULTS = {
@@ -173,6 +177,10 @@ JALALI_DATE_DEFAULTS = {
             ]
         }
     },
+}
+
+JAZZMIN_SETTINGS = {
+    "custom_css": 'admin/css/ltr.css',
 }
 # jazzmin settings
 

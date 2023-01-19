@@ -75,6 +75,22 @@ class Product(models.Model):
         return f"{self.title}"
 
 
+class ProductComment(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='محصول')
+    parent = models.ForeignKey('ProductComment', null=True, blank=True, on_delete=models.CASCADE, verbose_name='والد')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت')
+    text = models.TextField(verbose_name='متن نظر')
+    # todoo check from admin and if that was true comment show on site, else comment delete
+
+    def __str__(self):
+        return f'{self.product} - {self.user} : ...{self.text[:10]}'
+
+    class Meta:
+        verbose_name = 'نظر محصول'
+        verbose_name_plural = 'نظرات محصول'
+
+
 class ProductVisit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='محصول')
     ip = models.CharField(max_length=30, verbose_name='آی پی کاربر')

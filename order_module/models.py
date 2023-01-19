@@ -13,8 +13,21 @@ class Order(models.Model):
         verbose_name = 'سبد خرید'
         verbose_name_plural = 'سبد های خرید کاربران'
 
+    def calculate_tax(self):
+        tax_amount: int = 0
+        if self.is_paid:
+            for order_detail in self.orderdetail_set.all():
+                tax_amount += (order_detail.final_price * order_detail.count) * 9 / 100
+            return tax_amount
+        else:
+            for order_detail in self.orderdetail_set.all():
+                tax_amount += (order_detail.product.price * order_detail.count) * 9 / 100
+            return int(tax_amount)
+
+
     def calculate_amount(self):
-        total_amount = 0
+        # calculate amount without tax
+        total_amount: int = 0
         if self.is_paid:
             for order_detail in self.orderdetail_set.all():
                 total_amount += order_detail.final_price * order_detail.count
@@ -22,8 +35,14 @@ class Order(models.Model):
         else:
             for order_detail in self.orderdetail_set.all():
                 total_amount += order_detail.product.price * order_detail.count
+            return int(total_amount)
 
-            return total_amount
+    def calculate_total(self):
+        # calculate total amount with tax
+        total: int = 0
+        total += self.calculate_amount() + self.calculate_tax()
+        return int(total)
+
 
     def __str__(self):
         return str(self.user)
@@ -32,7 +51,7 @@ class Order(models.Model):
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='سبد خرید')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='محصول')
-    final_price = models.IntegerField(null=True, blank=True, verbose_name='قیمت نهایی تکی محصول')
+    final_price = models.IntegerField(null=True, blank=True, editable=False, verbose_name='قیمت نهایی تکی محصول')
     count = models.IntegerField(verbose_name='تعداد')
 
     class Meta:
@@ -44,3 +63,7 @@ class OrderDetail(models.Model):
 
     def __str__(self):
         return f'{self.product} - {self.order}'
+
+    def save(self, *args, **kwargs):
+        self.final_price = self.product.price
+        super().save(*args, **kwargs)

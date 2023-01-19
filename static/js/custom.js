@@ -19,6 +19,28 @@ function sendArticleComment(articleId) {
     })
 }
 
+function sendProductComment(productId) {
+    var comment = $('#comment-text').val();
+    var parentId = $('#parent_id').val();
+
+    $.get('/products/add-product-comment', {
+        product_comment: comment,
+        product_id: productId,
+        parent_id: parentId,
+    }).then(res => {
+        $('#comment_area').html(res);
+        $('#comment-text').val('');
+        $('#parent_id').val('');
+        if (parentId !== null && parentId !== '') {
+            document.getElementById('single_comment_box_' + parentId).scrollIntoView({behavior: "smooth"});
+        } else {
+            document.getElementById('comment_area').scrollIntoView({behavior: "smooth"});
+
+        }
+    })
+}
+
+
 function fillParentId(parentId) {
     $('#parent_id').val(parentId);
     document.getElementById('comment_form').scrollIntoView({behavior: "smooth"});
@@ -50,7 +72,10 @@ function showLargeImage(imageSrc) {
 
 
 function addProductToOrder(productId) {
-    const productCount = $('#product_count').val();
+    let productCount = $('#product_count').val();
+    if (productCount == null || productCount === 0) {
+        productCount = 1
+    }
     $.get('/order/add-to-order?product_id=' + productId + '&count=' + productCount).then(res => {
         Swal.fire({
             title: res.title,
@@ -81,7 +106,7 @@ function removeOrderDetail(detailId) {
 }
 
 function changeOrderDetailCount(detailId, state) {
-    console.log(detailId,state);
+    console.log(detailId, state);
 
     $.get('/userpanel/change-order-detail?detail_id=' + detailId + '&state=' + state).then(res => {
         if (res.status === 'success') {

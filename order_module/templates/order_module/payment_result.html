@@ -1,0 +1,34 @@
+{% extends 'shared/_layout.html' %}
+
+{% block title %}
+نتیجه پرداخت
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="com-md-12">
+            {% if info %}
+                <div class="alert alert-info">
+                    {{ info }}
+                </div>
+            {% endif %}
+            {% if error %}
+                <div class="alert alert-info">
+                    {{ error }}
+                </div>
+            {% endif %}
+            {% if success %}
+                <div class="alert alert-info">
+                    {{ success }}
+                </div>
+            {% endif %}
+            </div>
+        </div>
+        <br>
+        <hr>
+        <a class="btn btn-default check_out" href="{% url 'panel:user_order_page' %}">بازشگت به سبد خرید</a>
+    </div>
+
+{% endblock %}

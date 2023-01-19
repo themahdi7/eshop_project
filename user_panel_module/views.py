@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from account_module.models import User
 from order_module.models import Order, OrderDetail
 from user_panel_module.forms import EditProfileForm, ChangePasswordForm
@@ -85,11 +85,36 @@ class UserBasketPage(TemplateView):
         current_order, created = Order.objects.prefetch_related('orderdetail_set').get_or_create(
             is_paid=False, user_id=self.request.user.id)
         total_amount = current_order.calculate_amount()
+        tax_amount: int = current_order.calculate_tax()
+        total: int = current_order.calculate_total()
         context = {
             'order': current_order,
             'sum': total_amount,
+            'tax': tax_amount,
+            'total': total,
         }
         return context
+
+
+@method_decorator(login_required, name='dispatch')
+class UserOrderListPage(ListView):
+    model = Order
+    template_name = 'user_panel_module/user_order_list.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        queryset = queryset.filter(user_id=self.request.user.id, is_paid=True)
+
+        return queryset
+
+
+def user_order_detail_page(request, order_id):
+    template_name = 'user_panel_module/user_order_detail.html'
+    order = Order.objects.prefetch_related('orderdetail_set').filter(id=order_id, user_id=request.user.id).first()
+    if order is None:
+        raise Http404('سبد خرید مورد نظر یافت نشد')
+    return render(request, template_name, {'order': order})
 
 
 def remove_order_content(request):
@@ -112,10 +137,15 @@ def remove_order_content(request):
 
     current_order, created = Order.objects.prefetch_related('orderdetail_set').get_or_create(
         is_paid=False, user_id=request.user.id)
+
     total_amount = current_order.calculate_amount()
+    tax_amount: int = current_order.calculate_tax()
+    total: int = current_order.calculate_total()
     context = {
         'order': current_order,
         'sum': total_amount,
+        'tax': tax_amount,
+        'total': total,
     }
     return JsonResponse({
         'status': 'success',
@@ -165,9 +195,13 @@ def change_order_content(request):
     current_order, created = Order.objects.prefetch_related('orderdetail_set').get_or_create(
         is_paid=False, user_id=request.user.id)
     total_amount = current_order.calculate_amount()
+    tax_amount: int = current_order.calculate_tax()
+    total: int = current_order.calculate_total()
     context = {
         'order': current_order,
         'sum': total_amount,
+        'tax': tax_amount,
+        'total': total,
     }
     return JsonResponse({
         'status': 'success',

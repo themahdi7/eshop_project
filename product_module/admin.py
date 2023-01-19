@@ -21,10 +21,16 @@ class ProductGalleryAdmin(admin.ModelAdmin):
     list_display = ['product']
     list_filter = ['product']
 
+
+class ProductCommentAdmin(admin.ModelAdmin):
+    list_display = ['product', 'user', 'parent']
+    list_filter = ['product', 'user']
+
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.ProductCategory, ProductCategoryAdmin)
 admin.site.register(models.ProductTags)
 admin.site.register(models.ProductBrand)
 admin.site.register(models.ProductGallery, ProductGalleryAdmin)
 admin.site.register(models.ProductVisit, ProductVisitAdmin)
+admin.site.register(models.ProductComment, ProductCommentAdmin)
 

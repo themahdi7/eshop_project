@@ -1,24 +1,36 @@
 <ul class="list-group">
     <li class="list-group-item">
         <a href="{% url 'panel:user_dashboard' %}"
-           class="list-group-item {% if request.resolver_match.url_name == 'user_dashboard' %}active{% endif %}">پنل
-            کاربری</a>
+           class="list-group-item {% if request.resolver_match.url_name == 'user_dashboard' %}active{% endif %}">
+            پنل کاربری
+        </a>
     </li>
     <li class="list-group-item">
         <a href="{% url 'panel:edit_profile' %}"
-           class="list-group-item {% if request.resolver_match.url_name == 'edit_profile' %}active{% endif %}">ویرایش
-            اطلاعات</a>
+           class="list-group-item {% if request.resolver_match.url_name == 'edit_profile' %}active{% endif %}">
+            ویرایش اطلاعات
+        </a>
     </li>
 
     <li class="list-group-item">
-        <a href="{% url 'home:home' %}"
-           class="list-group-item {% if request.resolver_match.url_name == '' %}active{% endif %}">تیکت ها</a>
+        <a href="{% url 'panel:user_order_page' %}"
+           class="list-group-item {% if request.resolver_match.url_name == 'user_order_page' %}active{% endif %}">
+            سبد خرید
+        </a>
     </li>
+
+    <li class="list-group-item">
+        <a href="{% url 'panel:user_order_list_page' %}"
+           class="list-group-item {% if request.resolver_match.url_name == 'user_order_list_page' %}active{% endif %}">
+            لیست خرید های قبلی من
+        </a>
+    </li>
+
     <li class="list-group-item">
         <a href="{% url 'panel:change_password' %}"
-           class="list-group-item {% if request.resolver_match.url_name == 'change_password' %}active{% endif %}">تغییر
-            کلمه
-            عبور</a>
+           class="list-group-item {% if request.resolver_match.url_name == 'change_password' %}active{% endif %}">
+            تغییر کلمه عبور
+        </a>
     </li>
 
 </ul>

@@ -3,6 +3,8 @@ from django.http import Http404, HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
+
+from site_module.models import SiteSetting
 from .models import User
 from account_module.forms import RegisterForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
 from django.utils.crypto import get_random_string
@@ -42,7 +44,9 @@ class RegisterView(View):
                 user_session = request.session['user_registration_info']
                 user_email = user_session['email']
                 print(user_email)
-                send_email('فعالسازی حساب کاربری', user_email, {'active': email_active_code, 'user': user_email},
+                setting: SiteSetting = SiteSetting.objects.filter(is_main_setting=True).first()
+                send_email('فعالسازی حساب کاربری', user_email,
+                           {'active': email_active_code, 'user': user_email, 'site_setting': setting},
                            'emails/activate_account.html')
                 print("sent")
                 return redirect(reverse('account:login_page'))
@@ -60,7 +64,6 @@ class ActivateAccountView(View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, email_active_code):
-        print('activate_account')
         user_session = request.session['user_registration_info']
         user: User = User.objects.filter(email_active_code__iexact=email_active_code).first()
         if user is None:
@@ -75,9 +78,6 @@ class ActivateAccountView(View):
             new_user.save()
 
             return redirect(reverse('account:login_page'))
-            # else:
-            #     # todo : show error
-            #     pass
         else:
             raise Http404
 
@@ -137,10 +137,10 @@ class ForgetPassword(View):
         if forget_pass_form.is_valid():
             user_email = forget_pass_form.cleaned_data.get('email')
             user = User.objects.filter(email__iexact=user_email).first()
+            setting: SiteSetting = SiteSetting.objects.filter(is_main_setting=True).first()
             if user is not None:
-                send_email('بازیابی رمز عبور', user_email, {'user': user},
+                send_email('بازیابی رمز عبور', user_email, {'user': user, 'site_setting': setting},
                            'emails/forget_pass.html')
-
 
         context = {
             'forget_pass_form': forget_pass_form,

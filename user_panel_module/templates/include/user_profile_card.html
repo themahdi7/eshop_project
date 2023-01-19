@@ -1,0 +1,39 @@
+{% load render_partial %}
+{% load static %}
+{% load thumbnail %}
+<div class="col-md-3 pull-right">
+    {% render_partial 'user_panel_module.views.user_panel_menu_component' %}
+</div>
+<div class="col-md-3 pull-left">
+    <div class="col-md-12">
+        <ul class="list-group">
+            <div class="thumbnail">
+                {% if user.avatar %}
+                    {% thumbnail user.avatar "180x180" crop='center' as im %}
+                        <img src="{{ im.url }}" alt="avatar {{ user.last_name }}" class="img-circle">
+                    {% endthumbnail %}
+                {% else %}
+                    <img src="{% static 'images/default-avatar.png' %}" alt="{{ user.last_name }}"
+                         class="img-circle" width="180"
+                         height="180">
+                {% endif %}
+
+                <div class="caption">
+                    <h4 class="text-center">{{ user.username }}</h4>
+                    {% if user.first_name or user.last_name %}
+                        <hr>
+                        <h5 class="text-center">{{ user.first_name }} {{ user.last_name }}</h5>
+                    {% endif %}
+                    {% if user.about_user %}
+                        <hr>
+                        <p>{{ user.about_user }}</p>
+                    {% endif %}
+                    {% if user.address %}
+                        <hr>
+                        <p>{{ user.address }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </ul>
+    </div>
+</div>

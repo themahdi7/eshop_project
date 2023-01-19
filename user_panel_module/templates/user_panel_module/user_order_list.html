@@ -1,0 +1,43 @@
+{% extends 'shared/_layout.html' %}
+{% load jalali_tags %}
+{% load poll_extras %}
+{% load static %}
+{% load thumbnail %}
+{% load render_partial %}
+
+{% block title %}
+لیست خرید های من
+{% endblock %}
+
+{% block content %}
+
+    <h2 class="title text-center">
+        {% if request.resolver_match.url_name == 'edit_profile' %}
+            لیست خرید های من
+        {% endif %}
+    </h2>
+    <div class="row">
+        {% include 'include/user_profile_card.html' %}
+        <div class="col-sm-6">
+            <table class="table table-responsive table-hover table-striped">
+                <tr>
+                    <td><strong>شناسه</strong></td>
+                    <td><strong>تاریخ تایید فاکتور</strong></td>
+                    <td><strong>قیمت نهایی خرید</strong></td>
+                    <td><strong>دستورات</strong></td>
+                </tr>
+                {% for order in object_list %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.payment_date | to_jalali }}</td>
+                        <td>{{ order.calculate_total | three_digit_currency  }}</td>
+                        <td>
+                            <a href="{% url 'panel:user_order_detail_page' order_id=order.id %}" class="btn btn-success">جزییات</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

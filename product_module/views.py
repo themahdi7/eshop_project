@@ -1,5 +1,5 @@
 from django.db.models import Count
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import ListView
@@ -7,7 +7,7 @@ from django.views.generic.detail import DetailView
 from site_module.models import SiteBanner
 from utils.http_service import get_client_ip
 from utils.convertors import group_list
-from .models import Product, ProductCategory, ProductBrand, ProductVisit, ProductGallery
+from .models import Product, ProductCategory, ProductBrand, ProductVisit, ProductGallery, ProductComment
 
 
 class ProductListView(ListView):
@@ -16,6 +16,7 @@ class ProductListView(ListView):
     context_object_name = 'product'
     ordering = ['-created', '-price']
     paginate_by = 10
+
 
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data()
@@ -79,6 +80,12 @@ class ProductDetailView(DetailView):
         if not has_been_visited:
             new_visit = ProductVisit(ip=user_ip, user_id=user_id, product_id=loaded_product.id)
             new_visit.save()
+
+        product: Product = kwargs.get('object')
+        context['comment'] = ProductComment.objects.filter(product_id=product.id, parent=None).order_by(
+            '-created').prefetch_related(
+            'productcomment_set')
+        context['comment_count'] = ProductComment.objects.filter(product_id=product.id).count()
         return context
 
 
@@ -99,3 +106,22 @@ def product_brands_component(request):
         'brands': product_brand
     }
     return render(request, 'product_module/components/product_brands_component.html', context)
+
+
+def add_product_comment(request):
+    if request.user.is_authenticated:
+        product_comment = request.GET.get('product_comment')
+        product_id = request.GET.get('product_id')
+        parent_id = request.GET.get('parent_id')
+        print(product_comment, product_id, parent_id)
+        new_comment = ProductComment(product_id=product_id, text=product_comment, user_id=request.user.id,
+                                     parent_id=parent_id)
+        new_comment.save()
+        context = {
+            'comment': ProductComment.objects.filter(product_id=product_id, parent=None).order_by(
+                '-created').prefetch_related(
+                'productcomment_set'),
+            'comment_count': ProductComment.objects.filter(product_id=product_id).count()
+        }
+        return render(request, 'product_module/includes/product_comment_partial.html', context)
+    return HttpResponse('hello')

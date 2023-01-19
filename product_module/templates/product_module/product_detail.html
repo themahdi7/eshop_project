@@ -1,4 +1,5 @@
 {% extends 'shared/_layout.html' %}
+{% load jalali_tags %}
 {% load poll_extras %}
 {% load render_partial %}
 {% load static %}
@@ -95,7 +96,8 @@
                                     <span>
                                             <label>تعداد :</label>
 										<input type="number" min="1" value="1" class="search_box" id="product_count">
-										<button onclick="addProductToOrder('{{ product.id }}')" class="btn btn-fefault cart">
+										<button onclick="addProductToOrder('{{ product.id }}')"
+                                                class="btn btn-fefault cart">
 											<i class="fa fa-shopping-cart"></i>
 											افزودن به سبد خرید
 										</button>
@@ -109,29 +111,6 @@
 
                                     {% endif %}
                                 </div>
-                                <span class="socials-share share">
-									<ul>
-										<a href="#">
-											<li>
-												<label>بلـه</label>
-												<img src="{% static "images/product-details/Bale.png" %}">
-											</li>
-										</a>
-										<a href="#">
-											<li>
-												<label>سـروش</label>
-												<img src="{% static "images/product-details/Soroush.png" %}">
-											</li>
-										</a>
-										<a href="#">
-											<li>
-												<label>اینستاگرام</label>
-												<img src="{% static "images/product-details/Instagram.png" %}">
-											</li>
-										</a>
-										<li><img src="{% static "images/product-details/rating.png" %}" alt=""></li>
-									</ul>
-								</span>
 
                             </div><!--/product-information-->
                         </div>
@@ -141,7 +120,7 @@
                         <div class="col-sm-12">
                             <ul class="nav nav-tabs">
                                 <li><a href="#details" data-toggle="tab">جزئیات</a></li>
-                                <li><a href="#reviews" data-toggle="tab">نظرات (5)</a></li>
+                                <li><a href="#reviews" data-toggle="tab"> نظرات ({{ comment_count }})</a></li>
                             </ul>
                         </div>
                         <div class="tab-content">
@@ -152,26 +131,101 @@
                             </div>
                             <div class="tab-pane fade " id="reviews">
                                 <div class="col-sm-12">
-                                    <ul>
-                                        <li><a href=""><i class="fa fa-user"></i>مشتـری 1</a></li>
-                                        <li><a href=""><i class="fa fa-clock-o"></i>12:41 ب . ظ</a></li>
-                                        <li><a href=""><i class="fa fa-calendar-o"></i>29 تیـر 1397</a></li>
-                                    </ul>
-                                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ </p>
-                                    <p><b>نظـر خود را بنویسیـد</b></p>
 
-                                    <form action="#">
-										<span>
-											<input type="text" placeholder="نام و نام خانوادگـی">
-											<input type="email" placeholder="آدرس ایمیـل">
-										</span>
-                                        <textarea name=""></textarea>
-                                        <b>رتبـه : </b> <img src="{% static "images/product-details/rating.png" %}"
-                                                             alt="">
-                                        <button type="button" class="btn btn-default pull-left">
-                                            ارسـال
-                                        </button>
-                                    </form>
+                                    <div class="response-area" id="comment_area">
+                                        <ul class="media-list">
+                                            {% for comment in comment %}
+                                                <li class="media" id="single_comment_box_{{ comment.id }}">
+                                                    <a class="pull-right">
+                                                        {% if comment.user.avatar %}
+                                                            {% thumbnail comment.user.avatar "90x90" crop='center' as im %}
+                                                                <img src="{{ im.url }}" alt="avatar {{ comment.user }}" class="img-circle">
+                                                            {% endthumbnail %}
+                                                        {% else %}
+                                                            <img class="media-object"
+                                                                 src="{% static "images/default-avatar1.png" %}"
+                                                                 alt="avatar {{ comment.user }}">
+                                                        {% endif %}
+                                                    </a>
+                                                    <div class="media-body">
+                                                        <ul class="sinlge-post-meta">
+                                                            <li><i class="fa fa-user"></i>{{ comment.user }}</li>
+                                                            <li><i class="fa fa-clock-o"></i>{{ comment.created.time }}
+                                                            </li>
+                                                            <li>
+                                                                <i class="fa fa-calendar"></i>{{ comment.created.date | to_jalali }}
+                                                            </li>
+                                                        </ul>
+                                                        <p>{{ comment.text }}</p>
+                                                        <a class="btn btn-primary"
+                                                           onclick="fillParentId({{ comment.id }})"><i
+                                                                class="fa fa-reply"></i>پاسـخ</a>
+                                                    </div>
+                                                </li>
+                                                {% for sub_comment in comment.productcomment_set.all %}
+                                                    <li class="media second-media"
+                                                        id="single_comment_box_{{ comment.id }}">
+                                                        <a class="pull-right">
+                                                            {% if sub_comment.user.avatar %}
+                                                                {% thumbnail sub_comment.user.avatar "90x90" crop='center' as im %}
+                                                                    <img src="{{ im.url }}"
+                                                                         alt="avatar {{ sub_comment.user }}" class="img-circle">
+                                                                {% endthumbnail %}
+                                                            {% else %}
+                                                                <img class="media-object img-circle"
+                                                                     src="{% static "images/default-avatar1.png" %}"
+                                                                     alt="avatar {{ sub_comment.user }}" height="90" width="90">
+                                                            {% endif %}
+                                                        </a>
+                                                        <div class="media-body">
+                                                            <ul class="sinlge-post-meta">
+                                                                <li><i class="fa fa-user"></i>{{ sub_comment.user }}
+                                                                </li>
+                                                                <li>
+                                                                    <i class="fa fa-clock-o"></i>{{ sub_comment.created.time }}
+                                                                </li>
+                                                                <li>
+                                                                    <i class="fa fa-calendar"></i>{{ sub_comment.created.date | to_jalali }}
+                                                                </li>
+                                                            </ul>
+                                                            <p>{{ sub_comment.text }}</p>
+                                                        </div>
+                                                    </li>
+                                                {% endfor %}
+
+                                            {% endfor %}
+
+                                        </ul>
+                                    </div><!--/Response-area-->
+
+                                    <div class="replay-box" id="comment_form">
+                                        {% if request.user.is_authenticated %}
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h2>نظـر خود را بنویسیـد</h2>
+                                                    <div class="text-area">
+                                                        <input type="hidden" id="parent_id" value="">
+                                                        <div class="blank-arrow">
+                                                            <label>متن پیام</label>
+                                                        </div>
+                                                        <span>*</span>
+                                                        <textarea name="message" rows="11" class="form-control"
+                                                                  id="comment-text"
+                                                                  placeholder="نظر خود را به اشتراک بگذارید"></textarea>
+                                                        <a class="btn btn-primary"
+                                                           onclick="sendProductComment({{ product.id }})">ارسـال
+                                                            نظـر</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        {% else %}
+                                            <div class="alert alert-warning">
+                                                برای درج نظر میبایست در سایت <a href="{% url 'account:login_page' %}">لاگین</a>
+                                                کنید
+                                            </div>
+                                        {% endif %}
+                                    </div><!--/Repaly Box-->
                                 </div>
                             </div>
 
@@ -218,26 +272,7 @@
                             {% render_partial 'product_module.views.product_brands_component' %}
                         </div><!--/brands_products-->
 
-                        <div class="price-range"><!--price-range-->
-                            <h2>فیلتـر قیمـت</h2>
-                            <div class="well">
-                                <div class="slider slider-horizontal" style="width: 176px;">
-                                    <div class="slider-track">
-                                        <div class="slider-selection" style="left: 0.025%; width: 0.02%;"></div>
-                                        <div class="slider-handle round left-round" style="left: 0.025%;"></div>
-                                        <div class="slider-handle round" style="left: 0.045%;"></div>
-                                    </div>
-                                    <div class="tooltip top" style="top: -30px; left: -30.4384px;">
-                                        <div class="tooltip-arrow"></div>
-                                        <div class="tooltip-inner">250 : 450</div>
-                                    </div>
-                                    <input type="text" class="span2" value="" data-slider-min="0"
-                                           data-slider-max="1000000" data-slider-step="5" data-slider-value="[250,450]"
-                                           id="sl2" style=""></div>
-                                <br>
-                                <b>1.000.000 ريال</b> <b class="pull-left">0 ريال</b>
-                            </div>
-                        </div><!--/price-range-->
+                        </div>
                         {% for banner in banners %}
                             <div class="shipping text-center"><!--shipping-->
                                 {% if banner.image %}

@@ -29,14 +29,6 @@
     <div class="header-middle"><!--header-middle-->
         <div class="container">
             <div class="row">
-                <!-- <div class="col-sm-4 header-middle-menu">
-                    <div class="shop-menu pull-left">
-                        <ul class="nav navbar-nav">
-                            <li><a href="checkout.html"><i class="fa fa-crosshairs"></i> پرداخت</a></li>
-                        </ul>
-                    </div>
-                </div> -->
-
                 <div class="col-sm-4" style="text-align: left;">
                     <div class="logo">
                         <a href="{% url 'home:home' %}"><img src="{{ site_setting.site_logo.url }}"
@@ -54,7 +46,8 @@
                                 {% if request.user.is_superuser %}
                                     <li><a href="/admin"><i class="fa fa-user"></i> پنل ادمین</a></li>
                                 {% endif %}
-                                <li><a href="{% url 'panel:user_order_page' %}"><i class="fa fa-shopping-cart"></i> سبد خرید</a></li>
+                                <li><a href="{% url 'panel:user_order_page' %}"><i class="fa fa-shopping-cart"></i> سبد
+                                    خرید</a></li>
                                 <li><a href="{% url 'panel:user_dashboard' %}"><i class="fa fa-user"></i> پنل کاربری</a>
                                 </li>
                                 <li><a href="{% url 'account:logout_page' %}"><i class="fa fa-sign-out"></i> خروج</a>
@@ -75,11 +68,17 @@
     <div class="header-bottom"><!--header-bottom-->
         <div class="container">
             <div class="row">
-
                 <div class="col-sm-3">
-                    <div class="search_box pull-left">
-                        <input type="text" placeholder="جستـجو"/>
-                    </div>
+                    {% if request.resolver_match.url_name == 'home' or request.resolver_match.url_name == 'product_list' %}
+                        <div class="search_box pull-left">
+                        <form method="get" action="{% url 'home:product_search_result' %}">
+                            <input type="search" name="q" placeholder="دنبال چه محصولی میگردی؟"/>
+                            <button class="btn btn-success" type="submit" >
+                                جستجو
+                            </button>
+                        </form>
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="col-sm-9">
@@ -104,10 +103,10 @@
                             <li class="dropdown"><a href="{% url 'article:articles_list' %}"
                                     {% if request.resolver_match.url_name == 'articles_list' %}
                                                     class="active" {% endif %}>مقالات</a>
-{#                                <ul role="menu" class="sub-menu">#}
-{#                                    <li><a href="blog.html">آخریـن اخبـار</a></li>#}
-{#                                    <li><a href="blog-single.html">صفحـه خبـر</a></li>#}
-{#                                </ul>#}
+                                {#                                <ul role="menu" class="sub-menu">#}
+                                {#                                    <li><a href="blog.html">آخریـن اخبـار</a></li>#}
+                                {#                                    <li><a href="blog-single.html">صفحـه خبـر</a></li>#}
+                                {#                                </ul>#}
                             </li>
                             <li><a href="{% url 'home:about_us_page' %}"
                                     {% if request.resolver_match.url_name == 'about_us_page' %}
